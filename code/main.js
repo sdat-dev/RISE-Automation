@@ -301,7 +301,7 @@ function createPanelistfiles(Sessions) {
       var filename = session.Panelists[panelistcount].link;
       var content = buildPanelistContent(session.Panelists[panelistcount]);
       var targetfiles_location = path.join(targetlocationFolder, "speakers");
-      targetfiles_location = path.join(targetfiles_location,filename);
+      targetfiles_location = path.join(targetfiles_location, filename);
       fs.writeFileSync(targetfiles_location + ".html", content);
     }
   }
@@ -326,18 +326,17 @@ function buildPanelistHeader(Panelist) {
   return header;
 }
 
-const buildPanelistBio = async (Panelist) => {
+function buildPanelistBio(Panelist) {
   let content = "";
   let body = "";
   let imageURL = imageFolderLocation + Panelist.link + ".png";
   let imageSrc = "";
-
-  const response = await fetch(imageURL);
-  if(response.status == 200){
-    imageSrc = imageURL;
-  }
-
-  //sleep(400);
+  //fetch(imageURL).then(response => {
+  //  if (response.ok) {
+      imageSrc = imageURL;
+  //  }
+  //});
+  //sleepFor(2000);
   var image_template = `<div data-embed-button="media_browser" data-entity-embed-display="view_mode:media.embedded" data-entity-type="media" data-entity-uuid="7e65e94f-48b5-40ca-a0bc-2b805b4aa1f3" data-langcode="en" class="embedded-entity align-right">
         <div>
             <div class="field field--name-image field--type-image field--label-hidden field--item"> <img src="${imageSrc}" width="255" height="383" alt="havidan rodriguez photo" typeof="foaf:Image" class="img-responsive" style="border-radius: 4px; margin-top: 5px; margin-left: 20px"></div>
@@ -447,10 +446,10 @@ function findPanelistRoles(speakerroles, session) {
   }
 }
 
-const buildPanelistProfile= async(Panelist, isRelativeURl) =>{
+function buildPanelistProfile(Panelist, isRelativeURl) {
   var name = Panelist.name;
   var link = "https://sdat-dev.github.io/RISE/speakers/" + Panelist.link + ".html";
-  var imageSrc = "https://sdat-dev.github.io/RISE/raw/master/img/Speakers/placeholder.jpg";
+  var imageSrc = "https://sdat-dev.github.io/RISE/img/Profile.png";
   var imageURL = imageFolderLocation + Panelist.link + ".png";
   var designation = "";
   if (Panelist.title == "" && Panelist.institution == "") {
@@ -461,10 +460,11 @@ const buildPanelistProfile= async(Panelist, isRelativeURl) =>{
     designation = Panelist.title + ", " + Panelist.institution;
   }
   //Check for null condition
-  const response = await fetch(imageURL);
-  if(response.status == 200){
-    imageSrc = imageURL;
-  }
+  //fetch(imageURL).then(response => {
+  //  if (response.status == 200) {
+      imageSrc = imageURL;
+  //  }
+  //});
   //sleep(400);
   var speaker_template = `<div class = "col-lg-4 col-md-4 col-sm-6">
                     <a class = "speakers-link" href = "${link}">
@@ -744,4 +744,9 @@ function buildAgendaContent(CurrentSessions) {
     }
   }
   return content;
+}
+
+function sleepFor( sleepDuration ){
+  var now = new Date().getTime();
+  while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
 }
